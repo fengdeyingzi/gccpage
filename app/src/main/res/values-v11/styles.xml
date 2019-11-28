@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	
+  
+	
+    <style name="AppTheme" parent="@android:style/Theme.Holo.Light">
+        <!--
+		<item name="android:colorControlHighlight">#fff4511e</item>
+        <item name="android:colorPrimary">#fff4511e</item>
+        <item name="android:colorAccent">#fff4511e</item>
+        <item name="android:statusBarColor">#fff4511e</item>
+        <item name="android:navigationBarColor">#fff4511e</item>
+		-->
+
+		<!-- <item name="android:buttonStyle">@style/Button.Colored</item> -->
+		<item name="android:windowBackground">@color/window_background</item> 
+		
+		<item name="android:textColorHighlight">@color/textColorHighLight</item>
+    </style>
+</resources>

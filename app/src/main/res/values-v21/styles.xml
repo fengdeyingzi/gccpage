@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	
+    
+	
+	
+    <style name="AppTheme" parent="@android:style/Theme.Material.Light.DarkActionBar">
+       <!-- <item name="android:buttonStyle">@style/Button.Colored</item> -->
+		<item name="android:colorButtonNormal">@color/colorButtonNormal</item>
+		<item name="android:colorControlHighlight">@color/colorControlHighlight</item>
+        <item name="android:colorPrimary">@color/colorPrimary</item>
+        <item name="android:colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">@color/statusBarColor</item>
+        <item name="android:navigationBarColor">@color/navigationBarColor</item>
+		<item name="android:windowBackground">@color/window_background</item>
+				<item name="android:buttonStyle">@style/Button.Nomal</item>
+				
+		<item name="android:textColorHighlight">@color/textColorHighLight</item>
+    </style>
+		
+		
+		<style name="Button.Nomal" parent="@android:style/Widget.Material.Button">
+				<item name="android:textColor">#60a0f0</item>
+
+		</style>
+
+
+		
+		
+</resources>

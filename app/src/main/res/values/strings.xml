@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">gcc安装器(手机CAPP插件)</string>
+    <string name="sdcard_permission_confirmation">程序需要内存卡读写权限才能运行，请点击授权</string>
+    <string name="sdcard_permission_not_granted">内存卡权限申请失败</string>
+</resources>

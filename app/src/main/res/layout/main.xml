@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical"
+	android:padding="8dp">
+
+	<TextView
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="将gcc.zip解压到mythroad目录，若你已修改手机C的初始文件路径，请将gcc.zip解压到相应路径"
+		android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:layout_width="wrap_content"
+		android:text="解压到："/>
+
+	<EditText
+		android:layout_height="wrap_content"
+		android:inputType="textMultiLine"
+		android:layout_width="match_parent"
+		android:ems="10"
+		android:text="mythroad"
+		android:id="@+id/edit_dir"/>
+
+	<View
+		android:layout_height="8dp"
+		android:layout_width="match_parent"/>
+
+	<Button
+		android:layout_height="wrap_content"
+		android:text="立即解压gcc.zip"
+		android:textColor="#f0f0f0"
+		android:layout_width="match_parent"
+		android:id="@+id/btn_install"/>
+
+	<View
+		android:layout_height="8dp"
+		android:layout_width="match_parent"/>
+
+	<TextView
+		android:layout_height="wrap_content"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		android:layout_width="wrap_content"
+		android:textColor="#949494"/>
+
+</LinearLayout>
+

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	
+	<!-- Colored bordered ink button -->
+	<style name="Button" parent="android:Widget" >
+   </style>
+	<style name="Button.Colored">
+        <item name="android:background">@drawable/abc_btn_colored_material</item>
+        <!-- <item name="android:textAppearance">@style/TextAppearance.AppCompat.Widget.Button.Inverse</item> -->
+		
+		
+		
+		</style>
+	
+    <style name="AppTheme" parent="@android:style/Theme.Light">
+		<!-- <item name="android:buttonStyle">@style/Button.Colored</item> -->
+		<!-- 设置波纹颜色 -->
+        <!-- <item name="android:colorControlHighlight">#fff4511e</item> -->
+		<!-- ActionBar颜色 -->
+        <!-- <item name="android:colorPrimary">#fff4511e</item> -->
+        <!-- <item name="android:colorAccent">#fff4511e</item> -->
+		<!-- 状态栏颜色-->
+        <!-- <item name="android:statusBarColor">#fff4511e</item> -->
+        <!-- <item name="android:navigationBarColor">#fff4511e</item> -->
+    </style>
+</resources>
