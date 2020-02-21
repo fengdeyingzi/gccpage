@@ -1,2 +1,2 @@
 include ':app'
-rootProject.name='Gcc安装器'
+rootProject.name='gccpage'

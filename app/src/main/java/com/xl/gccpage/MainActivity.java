@@ -18,6 +18,7 @@ public class MainActivity extends Activity implements OnClickListener, GetInfoLi
     private static final String TAG = "MainActivity";
     public static final int DLG_CPU_ERROR = 301;
     private static int REQUEST_PERMISSION = 1020;
+    private String error;
 
     @Override
     public void run() {
@@ -38,6 +39,9 @@ public class MainActivity extends Activity implements OnClickListener, GetInfoLi
                         })
                 .create();
         dialog.show();
+        if(error!=null){
+            Toast.makeText(this,""+error, Toast.LENGTH_LONG).show();
+        }
     }
 
 
@@ -59,7 +63,7 @@ public class MainActivity extends Activity implements OnClickListener, GetInfoLi
                 new Thread() {
                     public void run() {
 
-                        inApk("gcc.zip", folder);
+                        unZipAssets("gcc.zip", folder);
                         handler.post(MainActivity.this);
                     }
                 }.start();
@@ -149,7 +153,7 @@ public class MainActivity extends Activity implements OnClickListener, GetInfoLi
     }
 
     //解压apk并安装
-    public void inApk(String assersFileName, String folder) {
+    public void unZipAssets(String assersFileName, String folder) {
         AssetManager assets = getAssets();
         try {
             //获取assets资源目录下的himarket.mp3,实际上是himarket.apk,为了避免被编译压缩，修改后缀名。
@@ -177,6 +181,7 @@ public class MainActivity extends Activity implements OnClickListener, GetInfoLi
         } catch (IOException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            error = e.getMessage();
         }
     }
 
