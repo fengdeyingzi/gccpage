@@ -62,8 +62,14 @@ public class MainActivity extends Activity implements OnClickListener, GetInfoLi
                 folder = getSDPath() + File.separator + dir;
                 new Thread() {
                     public void run() {
+                        String cpu = Build.CPU_ABI;
+                        if(cpu.indexOf("arm")>=0){
+                            unZipAssets("gcc.zip", folder);
+                        }
 
-                        unZipAssets("gcc.zip", folder);
+                        if(cpu.indexOf("x86")>=0){
+                            unZipAssets("gcc_i686.zip", folder);
+                        }
                         handler.post(MainActivity.this);
                     }
                 }.start();
@@ -93,7 +99,7 @@ public class MainActivity extends Activity implements OnClickListener, GetInfoLi
         handler = new Handler();
         String cpu = Build.CPU_ABI;
         if (cpu != null)
-            if (cpu.indexOf("arm") < 0) {
+            if (cpu.indexOf("arm") < 0 && cpu.indexOf("x86")<0) {
                 showDialog(DLG_CPU_ERROR);
 
             }
@@ -235,7 +241,7 @@ public class MainActivity extends Activity implements OnClickListener, GetInfoLi
         if (id == DLG_CPU_ERROR) {
             return new AlertDialog.Builder(this)
                     .setTitle("警告")
-                    .setMessage("当前系统cpu类型(" + Build.CPU_ABI + ")" + "与当前gcc(arm)" +
+                    .setMessage("当前系统cpu类型(" + Build.CPU_ABI + ")" + "与当前gcc" +
 							"不兼容，请下载对应的gcc进行安装，或反馈问题。")
                     .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                         @Override
