@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <paths xmlns:android="http://schemas.android.com/apk/res/android">
+        <external-path name="apk" path="apk"/>
+        <!--        files-->
+        <files-path name="my_images" path="images"/>
+        <files-path name="my_docs" path="docs"/>
+        <files-path name="file" path="." />
+        <!--        内存卡-->
+        <external-path name="mythroad" path="mythroad" />
+        <external-path name="download" path="DownLoad" />
+        <external-path name="my_video" path="video" />
+        <root-path name="my_sdcard" path="mnt"/>
+        <root-path name="my_storage" path="storage"/>
+
+        <!--        chche-->
+        <cache-path name="cache" path="." />
+
+
+    </paths>
+</resources>

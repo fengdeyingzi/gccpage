@@ -35,6 +35,12 @@
 		android:textColor="#f0f0f0"
 		android:layout_width="match_parent"
 		android:id="@+id/btn_install"/>
+	<Button
+		android:layout_height="wrap_content"
+		android:text="卸载gcc"
+		android:textColor="#f0f0f0"
+		android:layout_width="match_parent"
+		android:id="@+id/btn_uninstall"/>
 
 	<View
 		android:layout_height="8dp"

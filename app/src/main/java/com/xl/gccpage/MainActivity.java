@@ -14,6 +14,8 @@ import java.io.*;
 import android.content.*;
 import android.net.*;
 
+import com.xl.game.tool.FileProvider;
+
 public class MainActivity extends Activity implements OnClickListener, GetInfoListener, Runnable {
     private static final String TAG = "MainActivity";
     public static final int DLG_CPU_ERROR = 301;
@@ -26,16 +28,13 @@ public class MainActivity extends Activity implements OnClickListener, GetInfoLi
             dialog.cancel();
         Dialog dialog = new AlertDialog.Builder(this)
                 .setTitle("")
-                .setMessage("gcc.zip已解压到" + folder + "目录下，打开手机CAPP即可安装。")
-                .setPositiveButton("确定", new
+                .setMessage("gcc.zip已解压到" + folder + "目录下，打开手机CAPP即可安装。如果没有弹出安装提示,请升级手机CAPP")
+                .setPositiveButton("立即安装", new
                         DialogInterface.OnClickListener() {
-
                             @Override
                             public void onClick(DialogInterface p1, int p2) {
-                                // TODO: Implement this method
+                                shareFileFromCAPP(MainActivity.this,folder+File.separator+"gcc.zip");
                             }
-
-
                         })
                 .create();
         dialog.show();
@@ -63,22 +62,38 @@ public class MainActivity extends Activity implements OnClickListener, GetInfoLi
                 new Thread() {
                     public void run() {
                         String cpu = Build.CPU_ABI;
-                        if(cpu.indexOf("arm")>=0){
+                        if(cpu.indexOf("arm64")>=0){
+                            unZipAssets("gcc_aarch64.zip", folder);
+                        }
+                        else if(cpu.indexOf("arm")>=0){
                             unZipAssets("gcc.zip", folder);
                         }
-
-                        if(cpu.indexOf("x86")>=0){
+                        else if(cpu.indexOf("x86")>=0){
                             unZipAssets("gcc_i686.zip", folder);
                         }
                         handler.post(MainActivity.this);
                     }
                 }.start();
+break;
+            case R.id.btn_uninstall:
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("application/zip");
+                share.putExtra("action","ungcc");
+                share.setPackage("com.xl.capp");
+                share.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                try{
+                    startActivity(share);
+                }catch (ActivityNotFoundException e){
+                    e.printStackTrace();
+                }
 
 
         }
     }
 
     Button btn_slzw_install;
+    Button btn_uninstall;
     EditText edit_dir;
     //对话框 请稍候
     Dialog dialog;
@@ -94,8 +109,10 @@ public class MainActivity extends Activity implements OnClickListener, GetInfoLi
         setContentView(R.layout.main);
         btn_slzw_install = (Button) findViewById(R.id.btn_install);
         edit_dir = (EditText) findViewById(R.id.edit_dir);
+        btn_uninstall = (Button)findViewById(R.id.btn_uninstall);
 
         btn_slzw_install.setOnClickListener(this);
+        btn_uninstall.setOnClickListener(this);
         handler = new Handler();
         String cpu = Build.CPU_ABI;
         if (cpu != null)
@@ -146,16 +163,21 @@ public class MainActivity extends Activity implements OnClickListener, GetInfoLi
 
 
     //获取sd卡
-    public static String getSDPath() {
-        File sdDir = null;
-        boolean sdCardExist =
-				Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); //判断sd卡是否存在
-        if (sdCardExist) {
-            sdDir = Environment.getExternalStorageDirectory();//获取sd卡目录
-        } else {
-            return null;
+    public String getSDPath() {
+        if(Build.VERSION.SDK_INT <= 28){
+            File sdDir = null;
+            boolean sdCardExist =
+                    Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); //判断sd卡是否存在
+            if (sdCardExist) {
+                sdDir = Environment.getExternalStorageDirectory();//获取sd卡目录
+            } else {
+                return null;
+            }
+            return sdDir.getPath();
         }
-        return sdDir.getPath();
+        else {
+            return getFilesDir().getAbsolutePath();
+        }
     }
 
     //解压apk并安装
@@ -335,6 +357,34 @@ public class MainActivity extends Activity implements OnClickListener, GetInfoLi
 
             int result = grantResults[i];
             android.util.Log.i(TAG, "onRequestPermissionsResult: 权限申请 code=" + requestCode + " permission=" + permission + " result=" + result);
+        }
+    }
+
+    public void shareFileFromCAPP(Context context, String fileName) {
+        File file = new File(fileName);
+//        Intent launchIntent = context.getPackageManager()
+//                .getLaunchIntentForPackage(context.getPackageName());
+        if (null != file && file.exists()) {
+            Intent share = new Intent(Intent.ACTION_SEND);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                Uri contentUri  = FileProvider.getUriForFile(
+                        context, context.getPackageName() + ".fileprovider",
+                        file
+                );
+                share.putExtra(Intent.EXTRA_STREAM, contentUri);
+                share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            } else {
+                share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+            }
+            share.setType("application/zip"); //此处可发送多种文件
+            share.setAction(Intent.ACTION_SEND);
+            share.putExtra("action","gcc");
+            share.setPackage("com.xl.capp");
+            share.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            context.startActivity(Intent.createChooser(share, "分享文件"));
+        } else {
+            Toast.makeText(context, "打开手机C失败", Toast.LENGTH_SHORT).show();
         }
     }
 
