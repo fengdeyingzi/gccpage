@@ -61,16 +61,7 @@ public class MainActivity extends Activity implements OnClickListener, GetInfoLi
                 folder = getSDPath() + File.separator + dir;
                 new Thread() {
                     public void run() {
-                        String cpu = Build.CPU_ABI;
-                        if(cpu.indexOf("arm64")>=0){
-                            unZipAssets("gcc_aarch64.zip", folder);
-                        }
-                        else if(cpu.indexOf("arm")>=0){
-                            unZipAssets("gcc.zip", folder);
-                        }
-                        else if(cpu.indexOf("x86")>=0){
-                            unZipAssets("gcc_i686.zip", folder);
-                        }
+                        unZipAssets(gcc_zip_name, folder);
                         handler.post(MainActivity.this);
                     }
                 }.start();
@@ -99,6 +90,7 @@ break;
     Dialog dialog;
     //解压到的文件名
     String folder;
+    String gcc_zip_name;
 
     /**
      * Called when the activity is first created.
@@ -120,7 +112,19 @@ break;
                 showDialog(DLG_CPU_ERROR);
 
             }
-
+        if(cpu.indexOf("arm64")>=0){
+            gcc_zip_name = "gcc_aarch64.zip";
+        }
+        else if(cpu.indexOf("arm")>=0){
+            gcc_zip_name = "gcc.zip";
+        }
+        else if(cpu.indexOf("x86_64")>=0){
+            gcc_zip_name = "gcc_i686.zip";
+            showDialog(DLG_CPU_ERROR);
+        }
+        else if(cpu.indexOf("x86")>=0){
+            gcc_zip_name = "gcc_i686.zip";
+        }
         requestPermission();
     }
 
@@ -171,12 +175,12 @@ break;
             if (sdCardExist) {
                 sdDir = Environment.getExternalStorageDirectory();//获取sd卡目录
             } else {
-                return null;
+                return getCacheDir().getAbsolutePath();
             }
             return sdDir.getPath();
         }
         else {
-            return getFilesDir().getAbsolutePath();
+            return getCacheDir().getAbsolutePath();
         }
     }
 
@@ -264,7 +268,7 @@ break;
             return new AlertDialog.Builder(this)
                     .setTitle("警告")
                     .setMessage("当前系统cpu类型(" + Build.CPU_ABI + ")" + "与当前gcc" +
-							"不兼容，请下载对应的gcc进行安装，或反馈问题。")
+							"不兼容，如果你有相应的gcc编译器请联系我们，请下载对应的gcc进行安装，或反馈问题。")
                     .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
