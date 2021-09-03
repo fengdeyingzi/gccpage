@@ -2,14 +2,19 @@ package com.xl.gccpage;
 
 import android.Manifest;
 import android.app.*;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.*;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import android.view.View.*;
 import android.content.res.*;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import android.content.*;
 import android.net.*;
@@ -41,6 +46,58 @@ public class MainActivity extends Activity implements OnClickListener, GetInfoLi
         if(error!=null){
             Toast.makeText(this,""+error, Toast.LENGTH_LONG).show();
         }
+    }
+
+    /*
+     * @Author Sun Ruichuan
+     *
+     * */
+
+    public ArrayList<HashMap<String, Object>> getItems(Context context) {
+
+        PackageManager pckMan = context.getPackageManager();
+        ArrayList<HashMap<String, Object>> items = new ArrayList<HashMap<String, Object>>();
+
+        List<PackageInfo> packageInfo = pckMan.getInstalledPackages(0);
+
+        for (PackageInfo pInfo : packageInfo) {
+
+            HashMap<String, Object> item = new HashMap<String, Object>();
+
+            item.put("appimage", pInfo.applicationInfo.loadIcon(pckMan));
+            item.put("packageName", pInfo.packageName);
+            item.put("versionCode", pInfo.getLongVersionCode());
+            item.put("versionName", pInfo.versionName);
+            item.put("appName", pInfo.applicationInfo.loadLabel(pckMan).toString());
+
+            items.add(item);
+
+        }
+
+        return items;
+    }
+
+    //获取指定包名的应用版本号
+    public long getVersionCode(String packagename){
+        PackageManager pckMan = getPackageManager();
+
+        List<PackageInfo> packageInfo = pckMan.getInstalledPackages(0);
+
+        for (PackageInfo pInfo : packageInfo) {
+
+            HashMap<String, Object> item = new HashMap<String, Object>();
+
+            item.put("appimage", pInfo.applicationInfo.loadIcon(pckMan));
+            item.put("packageName", pInfo.packageName);
+            item.put("versionCode", pInfo.getLongVersionCode());
+            item.put("versionName", pInfo.versionName);
+            item.put("appName", pInfo.applicationInfo.loadLabel(pckMan).toString());
+            if(packagename.equals(pInfo.packageName)){
+                return pInfo.getLongVersionCode();
+            }
+        }
+
+        return -1;
     }
 
 
@@ -112,7 +169,7 @@ break;
                 showDialog(DLG_CPU_ERROR);
 
             }
-        if(cpu.indexOf("arm64")>=0){
+        if(cpu.indexOf("arm64")>=0 && getVersionCode("com.xl.capp")>=42){
             gcc_zip_name = "gcc_aarch64.zip";
         }
         else if(cpu.indexOf("arm")>=0){
@@ -126,11 +183,12 @@ break;
             gcc_zip_name = "gcc_i686.zip";
         }
         requestPermission();
+        Log.i(TAG, "onCreate: 手机C版本"+getVersionCode("com.xl.capp"));
     }
 
     @Override
     protected void onResume() {
-        // TODO: Implement this method
+
         super.onResume();
 		/*
 		String url = getTextFromAssets(this,"url");
@@ -168,7 +226,7 @@ break;
 
     //获取sd卡
     public String getSDPath() {
-        if(Build.VERSION.SDK_INT <= 28){
+        if(Build.VERSION.SDK_INT <= 28 || getVersionCode("com.xl.capp")<42){
             File sdDir = null;
             boolean sdCardExist =
                     Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED); //判断sd卡是否存在
@@ -211,7 +269,7 @@ break;
             //<uses-permission android:name="android.permission.INSTALL_PACKAGES" />
             //installApk(file);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
+
             e.printStackTrace();
             error = e.getMessage();
         }
@@ -224,7 +282,7 @@ break;
             try {
                 output = new FileOutputStream(file);
             } catch (FileNotFoundException e1) {
-                // TODO Auto-generated catch block
+
                 e1.printStackTrace();
             }
             try {
@@ -246,7 +304,6 @@ break;
             try {
                 stream.close();
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
         }
