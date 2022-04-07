@@ -66,7 +66,7 @@ public class MainActivity extends Activity implements OnClickListener, GetInfoLi
 
             item.put("appimage", pInfo.applicationInfo.loadIcon(pckMan));
             item.put("packageName", pInfo.packageName);
-            item.put("versionCode", pInfo.getLongVersionCode());
+            item.put("versionCode", pInfo.versionCode);
             item.put("versionName", pInfo.versionName);
             item.put("appName", pInfo.applicationInfo.loadLabel(pckMan).toString());
 
@@ -89,11 +89,11 @@ public class MainActivity extends Activity implements OnClickListener, GetInfoLi
 
             item.put("appimage", pInfo.applicationInfo.loadIcon(pckMan));
             item.put("packageName", pInfo.packageName);
-            item.put("versionCode", pInfo.getLongVersionCode());
+            item.put("versionCode", pInfo.versionCode);
             item.put("versionName", pInfo.versionName);
             item.put("appName", pInfo.applicationInfo.loadLabel(pckMan).toString());
             if(packagename.equals(pInfo.packageName)){
-                return pInfo.getLongVersionCode();
+                return pInfo.versionCode;
             }
         }
 
@@ -156,6 +156,7 @@ break;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+
         btn_slzw_install = (Button) findViewById(R.id.btn_install);
         edit_dir = (EditText) findViewById(R.id.edit_dir);
         btn_uninstall = (Button)findViewById(R.id.btn_uninstall);
@@ -425,28 +426,39 @@ break;
         File file = new File(fileName);
 //        Intent launchIntent = context.getPackageManager()
 //                .getLaunchIntentForPackage(context.getPackageName());
-        if (null != file && file.exists()) {
-            Intent share = new Intent(Intent.ACTION_SEND);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                Uri contentUri  = FileProvider.getUriForFile(
-                        context, context.getPackageName() + ".fileprovider",
-                        file
-                );
-                share.putExtra(Intent.EXTRA_STREAM, contentUri);
+        if(getVersionCode("com.xl.capp")>=42){
+            if (null != file && file.exists()) {
+                Intent share = new Intent(Intent.ACTION_SEND);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    Uri contentUri  = FileProvider.getUriForFile(
+                            context, context.getPackageName() + ".fileprovider",
+                            file
+                    );
+                    share.putExtra(Intent.EXTRA_STREAM, contentUri);
+                    share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                } else {
+                    share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+                }
+                share.setType("application/zip"); //此处可发送多种文件
+                share.setAction(Intent.ACTION_SEND);
+                share.putExtra("action","gcc");
+                share.setPackage("com.xl.capp");
+                share.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                context.startActivity(Intent.createChooser(share, "分享文件"));
             } else {
-                share.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
+                Toast.makeText(context, "打开手机C失败", Toast.LENGTH_SHORT).show();
             }
-            share.setType("application/zip"); //此处可发送多种文件
-            share.setAction(Intent.ACTION_SEND);
-            share.putExtra("action","gcc");
-            share.setPackage("com.xl.capp");
-            share.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            share.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            context.startActivity(Intent.createChooser(share, "分享文件"));
-        } else {
-            Toast.makeText(context, "打开手机C失败", Toast.LENGTH_SHORT).show();
+        }else
+            {
+            Intent launchIntent = context.getPackageManager()
+                    .getLaunchIntentForPackage("com.xl.capp");
+                launchIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                        | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+
+            context.startActivity(launchIntent);
         }
+
     }
 
 }

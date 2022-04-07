@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:gravity="center|left"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:layout_height="wrap_content">
+    <CheckBox
+        android:id="@+id/check_item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:text="20200413-0000.zip"
+        android:layout_weight="1.0"
+        android:id="@+id/text_item"
+        android:textSize="14sp"
+        android:minWidth="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/btn_delete"
+        android:text="删除"
+        android:gravity="center"
+        android:textColor="#ff0000"
+        android:layout_width="60dp"
+        android:layout_height="40dp"/>
+
+</LinearLayout>
