@@ -32,6 +32,15 @@
 
     </application>
 
+    <queries>
+        <package android:name="com.tencent.mm" />
+        <package android:name="com.tencent.qqlite" />
+        <package android:name="com.tencent.mobileqq" />
+        <package android:name="com.tencent.minihd.qq" />
+        <package android:name="com.tencent.tim" />
+        <package android:name="com.xl.opmrcc" />
+        <package android:name="com.xl.capp" />
+    </queries>
     <uses-permission android:name="android.permission.INTERNET" /><!-- 访问网络连接，可能产生GPRS流量 -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /><!-- Wifi 改变状态 -->
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /><!-- WiFi 状态 -->
