@@ -3,7 +3,7 @@ def keystorePropertiesFile = rootProject.file("key.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
     signingConfigs {
         release {
             keyAlias keystoreProperties['keyAlias']
@@ -15,6 +15,7 @@ android {
     defaultConfig {
         applicationId "com.xl.gccpage"
         minSdkVersion 15
+        //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 28
         versionCode 6
         versionName "1.6"
